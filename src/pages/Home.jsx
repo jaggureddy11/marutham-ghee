@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import TiltCard from '../components/TiltCard';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
-}
 
 const HERO_SLIDES = [
 
@@ -62,161 +56,6 @@ export default function Home({ addToCart, setCurrentPage }) {
     const textY = useTransform(scrollYProgress, [0, 1], ["-40px", "40px"]);
     const textOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
     const marqueeX = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
-
-    // Luxury Pinned Hero Section Refs & State
-    const luxuryHeroRef = useRef(null);
-    const scrubVideoRef = useRef(null);
-    const scrubCanvasRef = useRef(null);
-    const hasInitializedRef = useRef(false);
-    const [reducedMotion, setReducedMotion] = useState(false);
-
-    useEffect(() => {
-        setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    }, []);
-
-    useEffect(() => {
-        const initScrollTrigger = () => {
-            if (hasInitializedRef.current) return;
-            hasInitializedRef.current = true;
-
-            let mm = gsap.matchMedia();
-
-            mm.add("(min-width: 768px)", () => {
-                // Desktop animations (pinning, fading)
-                gsap.fromTo(".luxury-intro-text",
-                    { opacity: 0, y: 30 },
-                    { opacity: 1, y: 0, duration: 0.9, delay: 0.1, ease: "power3.out" }
-                );
-                gsap.fromTo(".luxury-canvas-container",
-                    { scale: 0.92, opacity: 0 },
-                    { scale: 1.0, opacity: 1, duration: 1.1, delay: 0.05, ease: "power3.out" }
-                );
-
-                gsap.set(".scroll-panel", { opacity: 0, y: 40, x: 0 });
-
-                gsap.set(".progress-dot-0", { backgroundColor: "#8B5A2B", scale: 1.2 });
-                gsap.set(".progress-dot-1, .progress-dot-2, .progress-dot-3", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0 });
-
-                const tl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: luxuryHeroRef.current,
-                        start: "top top",
-                        end: "+=320%",  
-                        scrub: 1.5,    
-                        pin: true,
-                        anticipatePin: 1
-                    }
-                });
-
-                tl.addLabel("intro", 0)
-                    .to(".luxury-canvas-scroll-wrapper", {
-                        scale: 1.0, x: 0, rotate: 0,
-                        duration: 3, ease: "power1.inOut"
-                    }, "intro")
-                    .to(luxuryHeroRef.current, {
-                        backgroundColor: "#FAF7F0",
-                        duration: 3, ease: "power1.inOut"
-                    }, "intro")
-                    .addLabel("panel1-transition", 3)
-                    .to(".luxury-intro-scroll-wrapper", {
-                        opacity: 0, y: -20,
-                        duration: 2, ease: "power2.inOut"
-                    }, "panel1-transition")
-                    .to(".progress-dot-0", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel1-transition")
-                    .to(".progress-dot-1", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel1-transition")
-                    .to(luxuryHeroRef.current, {
-                        backgroundColor: "#E6EBE0",
-                        duration: 3, ease: "power2.inOut"
-                    }, "panel1-transition")
-                    .fromTo(".scroll-panel-1",
-                        { opacity: 0, y: 40 },
-                        { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
-                        "panel1-transition+=1"
-                    )
-                    .to(".luxury-canvas-scroll-wrapper", {
-                        scale: 1.04, x: 12, rotate: 2,
-                        duration: 3, ease: "power2.inOut"
-                    }, "panel1-transition+=0.5")
-                    .addLabel("panel1-hold", "panel1-transition+=4")
-                    .addLabel("panel2-transition", "panel1-hold+=2")
-                    .to(".scroll-panel-1", {
-                        opacity: 0, y: -20,
-                        duration: 2, ease: "power2.inOut"
-                    }, "panel2-transition")
-                    .to(".progress-dot-1", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel2-transition")
-                    .to(".progress-dot-2", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel2-transition")
-                    .to(luxuryHeroRef.current, {
-                        backgroundColor: "#F5EBE6",
-                        duration: 3, ease: "power2.inOut"
-                    }, "panel2-transition")
-                    .fromTo(".scroll-panel-2",
-                        { opacity: 0, y: 40 },
-                        { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
-                        "panel2-transition+=1"
-                    )
-                    .to(".luxury-canvas-scroll-wrapper", {
-                        scale: 1.06, x: -8, rotate: -2,
-                        duration: 3, ease: "power2.inOut"
-                    }, "panel2-transition+=0.5")
-                    .addLabel("panel2-hold", "panel2-transition+=4")
-                    .addLabel("panel3-transition", "panel2-hold+=2")
-                    .to(".scroll-panel-2", {
-                        opacity: 0, y: -20,
-                        duration: 2, ease: "power2.inOut"
-                    }, "panel3-transition")
-                    .to(".progress-dot-2", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel3-transition")
-                    .to(".progress-dot-3", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel3-transition")
-                    .to(luxuryHeroRef.current, {
-                        backgroundColor: "#FAF0D7",
-                        duration: 3, ease: "power2.inOut"
-                    }, "panel3-transition")
-                    .fromTo(".scroll-panel-3",
-                        { opacity: 0, y: 40 },
-                        { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
-                        "panel3-transition+=1"
-                    )
-                    .to(".luxury-canvas-scroll-wrapper", {
-                        scale: 1.03, x: 0, rotate: 0,
-                        filter: "drop-shadow(0 20px 50px rgba(212,175,55,0.15))",
-                        duration: 3, ease: "power2.inOut"
-                    }, "panel3-transition+=0.5")
-                    .addLabel("panel3-hold", "panel3-transition+=4")
-                    .addLabel("exit", "panel3-hold+=2")
-                    .to(".scroll-panel-3", {
-                        opacity: 0, y: -20,
-                        duration: 2, ease: "power2.inOut"
-                    }, "exit")
-                    .to(".progress-dot-3", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "exit")
-                    .to(luxuryHeroRef.current, {
-                        backgroundColor: "#FAF7F0",
-                        duration: 3, ease: "power2.inOut"
-                    }, "exit")
-                    .to(".luxury-canvas-scroll-wrapper", {
-                        scale: 0.88, y: -80, opacity: 0,
-                        filter: "drop-shadow(0 0 0 rgba(0,0,0,0))",
-                        duration: 3, ease: "power2.inOut"
-                    }, "exit+=0.5");
-            });
-
-            mm.add("(max-width: 767px)", () => {
-                // Mobile animations (no pinning, simpler layout)
-                gsap.fromTo(".luxury-intro-text",
-                    { opacity: 0, y: 20 },
-                    { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ease: "power2.out" }
-                );
-                gsap.fromTo(".luxury-canvas-container",
-                    { scale: 0.95, opacity: 0 },
-                    { scale: 1.0, opacity: 1, duration: 1, delay: 0.2, ease: "power2.out" }
-                );
-            });
-        };
-
-        initScrollTrigger();
-
-        return () => {
-            ScrollTrigger.getAll().forEach(t => t.kill());
-        };
-    }, [reducedMotion]);
 
     // Slide rotation interval
     useEffect(() => {
@@ -286,196 +125,68 @@ export default function Home({ addToCart, setCurrentPage }) {
                 .luxury-float {
                     animation: luxuryFloat 6s ease-in-out infinite;
                 }
-                /* Scroll panels: hidden by default, GSAP reveals them */
-                .scroll-panel {
-                    opacity: 0;
-                    transform: translateY(40px);
-                    pointer-events: none;
-                    will-change: opacity, transform;
-                }
-                .luxury-intro-text {
-                    pointer-events: auto;
-                }
             `}</style>
 
-            {/* Luxury Pinned Hero Section */}
+            {/* Luxury Static Hero Section */}
             <section
-                ref={luxuryHeroRef}
-                className="relative w-full h-screen overflow-hidden flex items-center justify-center bg-[#FAF7F0]"
+                className="relative w-full min-h-screen lg:h-screen flex items-center justify-center bg-[#FAF7F0] overflow-hidden pt-20 md:pt-0"
             >
-                {/* Background ambient lighting/gradient (shifted left to glow behind the jar) */}
+                {/* Background ambient lighting/gradient */}
                 <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_35%_45%,rgba(212,175,55,0.12)_0%,transparent_75%)] pointer-events-none" />
 
-                {/* Content Container (Text deck layout right-aligned beside the image) */}
-                <div className="absolute inset-x-4 md:inset-x-auto md:right-12 lg:right-24 bottom-6 md:bottom-auto md:top-1/2 md:-translate-y-1/2 sm:w-[500px] h-[35vh] min-h-[250px] md:min-h-0 md:h-[460px] select-none z-10 pointer-events-auto text-center md:text-left mx-auto md:mx-0 flex flex-col justify-end md:justify-center">
-
-                    {/* Panel 0 – Initial Intro Text */}
-                    <div className="luxury-intro-text absolute inset-0 flex flex-col justify-center z-10 h-full">
-                        <div className="luxury-intro-scroll-wrapper w-full h-full flex flex-col justify-center">
-                            <span className="font-label-lg text-label-lg text-ghee-gold uppercase tracking-[0.25em] mb-4 block font-bold">
-                                The Gold Standard of Purity
-                            </span>
-                            <h1 className="font-display-lg text-3xl md:text-5xl text-earth-brown mb-6 font-bold leading-tight tracking-tight">
-                                The Honest Way to Vedic Wellness
-                            </h1>
-                            <p className="font-body-lg text-body-md text-earth-brown/80 mb-8 leading-relaxed">
-                                Crafted from the milk of free-grazing cows using the traditional Vedic Bilona method.
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                                <button
-                                    onClick={() => { const el = document.getElementById('products'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
-                                    className="bg-earth-brown text-warm-cream px-8 py-4 font-label-lg text-label-sm font-bold hover:bg-ghee-gold hover:text-earth-brown hover:scale-[1.03] transition-all text-center cursor-pointer rounded shadow-sm btn-shimmer"
-                                >
-                                    Shop A2 Desi Ghee
-                                </button>
-                                <button
-                                    onClick={() => setCurrentPage('vedic-process')}
-                                    className="border-2 border-earth-brown text-earth-brown px-8 py-4 font-label-lg text-label-sm font-bold hover:bg-earth-brown hover:text-warm-cream hover:scale-[1.03] transition-all text-center cursor-pointer rounded"
-                                >
-                                    Our Heritage
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Panel 1 – Grass-Fed Origin Text */}
-                    <div className="scroll-panel scroll-panel-1 hidden md:flex absolute inset-0 flex-col justify-center h-full">
-                        <span className="text-ghee-gold text-4xl mb-6">🌿</span>
+                {/* Content Container (Text deck layout right-aligned beside the image on desktop) */}
+                <div className="absolute inset-x-4 md:inset-x-auto md:right-12 lg:right-24 bottom-6 md:bottom-auto md:top-1/2 md:-translate-y-1/2 sm:w-[500px] h-auto z-10 text-center md:text-left mx-auto md:mx-0 flex flex-col justify-end md:justify-center">
+                    
+                    {/* Intro Text */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" }}
+                        className="w-full flex flex-col justify-center"
+                    >
                         <span className="font-label-lg text-label-lg text-ghee-gold uppercase tracking-[0.25em] mb-4 block font-bold">
-                            Step 01 — Origin
+                            The Gold Standard of Purity
                         </span>
-                        <h2 className="font-display-lg text-2xl md:text-4xl text-earth-brown mb-5 font-bold leading-tight">
-                            Born from Pasture,<br />Not Factories
-                        </h2>
-                        <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed mb-6">
-                            Our Gir & Hallikar cows roam freely in pesticide-free green pastures. Their A2-rich milk carries the full force of natural nutrition — no hormones, no confinement.
+                        <h1 className="font-display-lg text-4xl md:text-5xl lg:text-6xl text-earth-brown mb-6 font-bold leading-tight tracking-tight">
+                            The Honest Way to<br/>Vedic Wellness
+                        </h1>
+                        <p className="font-body-lg text-body-lg text-earth-brown/80 mb-8 leading-relaxed max-w-sm mx-auto md:mx-0">
+                            Crafted from the milk of free-grazing cows using the traditional Vedic Bilona method.
                         </p>
-                        <div className="flex items-center gap-3 mt-auto">
-                            <div className="w-8 h-[2px] bg-ghee-gold" />
-                            <span className="font-label-sm text-xs text-earth-brown/60 uppercase tracking-widest font-bold">100% Free-Grazing Desi Cows</span>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                            <button
+                                onClick={() => { const el = document.getElementById('products'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+                                className="bg-earth-brown text-warm-cream px-8 py-4 font-label-lg text-label-sm font-bold hover:bg-ghee-gold hover:text-earth-brown hover:scale-[1.03] transition-all text-center cursor-pointer rounded shadow-sm btn-shimmer"
+                            >
+                                Shop A2 Desi Ghee
+                            </button>
+                            <button
+                                onClick={() => setCurrentPage('vedic-process')}
+                                className="border-2 border-earth-brown text-earth-brown px-8 py-4 font-label-lg text-label-sm font-bold hover:bg-earth-brown hover:text-warm-cream hover:scale-[1.03] transition-all text-center cursor-pointer rounded"
+                            >
+                                Our Heritage
+                            </button>
                         </div>
-                    </div>
-
-                    {/* Panel 2 – Bilona Method Text */}
-                    <div className="scroll-panel scroll-panel-2 hidden md:flex absolute inset-0 flex-col justify-center h-full">
-                        <span className="text-ghee-gold text-4xl mb-6">🪔</span>
-                        <span className="font-label-lg text-label-lg text-ghee-gold uppercase tracking-[0.25em] mb-4 block font-bold">
-                            Step 02 — Craft
-                        </span>
-                        <h2 className="font-display-lg text-2xl md:text-4xl text-earth-brown mb-5 font-bold leading-tight">
-                            Hand-Churned by<br />Ancestral Rhythm
-                        </h2>
-                        <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed mb-6">
-                            Milk is cultured overnight, then slow-churned with a wooden Bilona to extract the finest cultured butter. Rooted in Rigvedic tradition — every churn is a prayer.
-                        </p>
-                        <div className="flex items-center gap-3 mt-auto">
-                            <div className="w-8 h-[2px] bg-ghee-gold" />
-                            <span className="font-label-sm text-xs text-earth-brown/60 uppercase tracking-widest font-bold">Vedic Bilona Method</span>
-                        </div>
-                    </div>
-
-                    {/* Panel 3 – Slow-Fire Clarity Text */}
-                    <div className="scroll-panel scroll-panel-3 hidden md:flex absolute inset-0 flex-col justify-center h-full">
-                        <span className="text-ghee-gold text-4xl mb-6">✨</span>
-                        <span className="font-label-lg text-label-lg text-ghee-gold uppercase tracking-[0.25em] mb-4 block font-bold">
-                            Step 03 — Clarity
-                        </span>
-                        <h2 className="font-display-lg text-2xl md:text-4xl text-earth-brown mb-5 font-bold leading-tight">
-                            Golden. Grainy.<br />Perfectly Clarified.
-                        </h2>
-                        <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed mb-6">
-                            Butter is slow-clarified over a wood fire in clay pots. The result? A rich, nutty aroma and a golden hue packed with Butyric acid, Vitamin K2, and Omega-3 fatty acids.
-                        </p>
-                        <div className="flex items-center gap-4 flex-wrap mt-auto">
-                            {["Butyric Acid", "Vitamin K2", "Omega-3", "CLA"].map(tag => (
-                                <span key={tag} className="px-3 py-1 bg-ghee-gold/10 text-earth-brown text-xs font-bold rounded-full border border-ghee-gold/30">{tag}</span>
-                            ))}
-                        </div>
-                    </div>
-
+                    </motion.div>
                 </div>
 
-                {/* Left Column: Enlarged Product Image positioned properly on the left, without getting cut off */}
-                <div className="absolute inset-x-4 md:inset-x-auto md:left-12 lg:left-24 top-12 md:top-[48%] md:-translate-y-1/2 md:w-[65%] lg:w-[48vw] max-w-[800px] h-[35vh] md:h-auto md:aspect-[3/2] flex items-center justify-center z-0 select-none pointer-events-auto mx-auto md:mx-0">
+                {/* Left Column: Enlarged Product Image */}
+                <motion.div 
+                    initial={{ scale: 0.92, opacity: 0 }}
+                    animate={{ scale: 1.0, opacity: 1 }}
+                    transition={{ duration: 1.1, delay: 0.05, ease: "easeOut" }}
+                    className="absolute inset-x-4 md:inset-x-auto md:left-12 lg:left-24 top-12 md:top-[48%] md:-translate-y-1/2 md:w-[65%] lg:w-[48vw] max-w-[800px] h-[45vh] md:h-auto md:aspect-[3/2] flex items-center justify-center z-0 select-none pointer-events-none mx-auto md:mx-0"
+                >
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-ghee-gold/5 rounded-full blur-3xl pointer-events-none" />
 
-                    <div className="luxury-canvas-container relative w-full h-full flex items-center justify-center">
-                        <div className="luxury-canvas-scroll-wrapper w-full h-full flex items-center justify-center relative">
-                            <img
-                                src="/hero_ghee_splash_transparent.png"
-                                alt="Premium Marutham Desi Ghee bottle with golden splash"
-                                className="w-full h-full object-contain pointer-events-none drop-shadow-[0_25px_50px_rgba(212,175,55,0.15)]"
-                            />
-                        </div>
+                    <div className="relative w-full h-full flex items-center justify-center">
+                        <img
+                            src="/hero_ghee_splash_transparent.png"
+                            alt="Premium Marutham Desi Ghee bottle with golden splash"
+                            className="w-full h-full object-contain pointer-events-none drop-shadow-[0_25px_50px_rgba(212,175,55,0.15)]"
+                        />
                     </div>
-                </div>
-
-                {/* Scroll Indicator */}
-                <motion.div
-                    animate={{ y: [0, 8, 0] }}
-                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                    className="absolute bottom-20 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-1.5 z-20 pointer-events-none"
-                >
-                    <span className="font-label-sm text-[10px] text-earth-brown/50 tracking-widest font-bold">SCROLL TO DISCOVER</span>
-                    <span className="material-symbols-outlined text-earth-brown/60 text-lg">keyboard_arrow_down</span>
                 </motion.div>
-            </section>
-
-            {/* Mobile-only Steps Section (Fallback for the GSAP scroll panels) */}
-            <section className="py-20 px-margin-mobile md:hidden bg-warm-cream flex flex-col gap-16 border-b border-earth-brown/5">
-                <div className="flex flex-col gap-4 text-center">
-                    <span className="text-ghee-gold text-4xl">🌿</span>
-                    <span className="font-label-lg text-label-md text-ghee-gold uppercase tracking-[0.25em] font-bold">
-                        Step 01 — Origin
-                    </span>
-                    <h2 className="font-display-lg text-2xl text-earth-brown font-bold leading-tight">
-                        Born from Pasture,<br />Not Factories
-                    </h2>
-                    <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed">
-                        Our Gir & Hallikar cows roam freely in pesticide-free green pastures. Their A2-rich milk carries the full force of natural nutrition — no hormones, no confinement.
-                    </p>
-                    <div className="flex items-center justify-center gap-3 mt-2">
-                        <div className="w-6 h-[2px] bg-ghee-gold" />
-                        <span className="font-label-sm text-[10px] text-earth-brown/60 uppercase tracking-widest font-bold">100% Free-Grazing Desi Cows</span>
-                        <div className="w-6 h-[2px] bg-ghee-gold" />
-                    </div>
-                </div>
-
-                <div className="flex flex-col gap-4 text-center">
-                    <span className="text-ghee-gold text-4xl">🪔</span>
-                    <span className="font-label-lg text-label-md text-ghee-gold uppercase tracking-[0.25em] font-bold">
-                        Step 02 — Craft
-                    </span>
-                    <h2 className="font-display-lg text-2xl text-earth-brown font-bold leading-tight">
-                        Hand-Churned by<br />Ancestral Rhythm
-                    </h2>
-                    <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed">
-                        Milk is cultured overnight, then slow-churned with a wooden Bilona to extract the finest cultured butter. Rooted in Rigvedic tradition — every churn is a prayer.
-                    </p>
-                    <div className="flex items-center justify-center gap-3 mt-2">
-                        <div className="w-6 h-[2px] bg-ghee-gold" />
-                        <span className="font-label-sm text-[10px] text-earth-brown/60 uppercase tracking-widest font-bold">Vedic Bilona Method</span>
-                        <div className="w-6 h-[2px] bg-ghee-gold" />
-                    </div>
-                </div>
-
-                <div className="flex flex-col gap-4 text-center">
-                    <span className="text-ghee-gold text-4xl">✨</span>
-                    <span className="font-label-lg text-label-md text-ghee-gold uppercase tracking-[0.25em] font-bold">
-                        Step 03 — Clarity
-                    </span>
-                    <h2 className="font-display-lg text-2xl text-earth-brown font-bold leading-tight">
-                        Golden. Grainy.<br />Perfectly Clarified.
-                    </h2>
-                    <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed">
-                        Butter is slow-clarified over a wood fire in clay pots. The result? A rich, nutty aroma and a golden hue packed with Butyric acid, Vitamin K2, and Omega-3 fatty acids.
-                    </p>
-                    <div className="flex items-center justify-center gap-2 flex-wrap mt-2 max-w-sm mx-auto">
-                        {["Butyric Acid", "Vitamin K2", "Omega-3", "CLA"].map(tag => (
-                            <span key={tag} className="px-3 py-1 bg-ghee-gold/10 text-earth-brown text-xs font-bold rounded-full border border-ghee-gold/30">{tag}</span>
-                        ))}
-                    </div>
-                </div>
             </section>
 
             {/* Featured Section: Sattvic by Nature */}
