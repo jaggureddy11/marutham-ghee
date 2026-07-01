@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ghee-gold: #D4AF37;
+  --color-earth-brown: #4A3728;
+  --color-warm-cream: #FDFBF7;
+  --color-leaf-green: #708238;
+  --color-deep-brown: #1E120B;
+  --color-surface: #fbf9f5;
+  --color-on-surface: #1b1c1a;
+  --color-secondary-container: #f8dac5;
+  
+  --font-display-lg: "Playfair Display", serif;
+  --font-display-lg-mobile: "Playfair Display", serif;
+  --font-headline-lg: "Playfair Display", serif;
+  --font-headline-md: "Playfair Display", serif;
+  --font-body-lg: "Montserrat", sans-serif;
+  --font-body-md: "Montserrat", sans-serif;
+  --font-label-lg: "Montserrat", sans-serif;
+  --font-label-sm: "Montserrat", sans-serif;
+  
+  --spacing-margin-desktop: 64px;
+  --spacing-margin-mobile: 20px;
+  --spacing-container-max: 1280px;
+  --spacing-unit: 8px;
+  --spacing-gutter: 24px;
+  --spacing-section-gap: 120px;
+  
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 9999px;
+}
+
+@layer utilities {
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    font-family: 'Material Symbols Outlined';
+  }
+  .ambient-shadow {
+    box-shadow: 0 10px 30px rgba(74, 55, 40, 0.05);
+  }
+  .ambient-shadow-hover:hover {
+    box-shadow: 0 20px 40px rgba(74, 55, 40, 0.08);
+  }
+  .hero-gradient {
+    background: linear-gradient(to bottom, rgba(74, 55, 40, 0.4), rgba(74, 55, 40, 0.1));
+  }
+  .hero-gradient-pregnancy {
+    background: linear-gradient(to right, rgba(253, 251, 247, 0.9) 30%, rgba(253, 251, 247, 0) 100%);
+  }
+  .glass-panel {
+    background: rgba(253, 251, 247, 0.7);
+    backdrop-filter: blur(12px);
+  }
+  .subtle-shadow {
+    box-shadow: 0 10px 30px -15px rgba(74, 55, 40, 0.1);
+  }
+  .btn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.25) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    transition: none;
+  }
+  .btn-shimmer:hover::after {
+    left: 150%;
+    transition: left 0.8s ease-in-out;
+  }
+}
+
+body {
+  background-color: #FDFBF7;
+  color: #4A3728;
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
