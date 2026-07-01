@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function UserModal({ isOpen, onClose }) {
+export default function UserModal({ isOpen, onClose, setCurrentPage }) {
     const [isRegisterMode, setIsRegisterMode] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -11,12 +11,16 @@ export default function UserModal({ isOpen, onClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         
+        // Assign role: if email contains "admin", assign admin role, else user role
+        const role = email.toLowerCase().includes('admin') ? 'admin' : 'user';
+
         // Mock JWT generation for frontend demonstration
         const mockHeader = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
         const mockPayload = btoa(JSON.stringify({ 
             email, 
             name: isRegisterMode ? name : undefined, 
             phone: isRegisterMode ? phone : undefined,
+            role,
             exp: Math.floor(Date.now() / 1000) + (60 * 60) 
         }));
         const mockSignature = "mock_signature_for_demo";
@@ -27,10 +31,16 @@ export default function UserModal({ isOpen, onClose }) {
         if (isRegisterMode) {
             alert(`Registration Successful for ${name}!\nJWT Token generated and stored.`);
         } else {
-            alert("Logged In Successfully!\nJWT Token generated and stored.");
+            alert(`Logged In Successfully as ${role}!\nJWT Token generated and stored.`);
         }
         
         onClose();
+        
+        // Redirect to appropriate dashboard
+        if (setCurrentPage) {
+            setCurrentPage(role === 'admin' ? 'admin-dashboard' : 'user-dashboard');
+        }
+
         setEmail('');
         setPassword('');
         setName('');

@@ -12,6 +12,8 @@ import PurityGuide from './pages/PurityGuide';
 import VedicProcess from './pages/VedicProcess';
 import PregnancyBenefits from './pages/PregnancyBenefits';
 import BeautyBenefits from './pages/BeautyBenefits';
+import AdminDashboard from './pages/AdminDashboard';
+import UserDashboard from './pages/UserDashboard';
 
 export default function App() {
     const [currentPage, setCurrentPage] = useState('home');
@@ -71,8 +73,31 @@ export default function App() {
                 return <PregnancyBenefits setCurrentPage={setCurrentPage} />;
             case 'beauty-benefits':
                 return <BeautyBenefits setCurrentPage={setCurrentPage} />;
+            case 'admin-dashboard':
+                return <AdminDashboard setCurrentPage={setCurrentPage} />;
+            case 'user-dashboard':
+                return <UserDashboard setCurrentPage={setCurrentPage} />;
             default:
                 return <Home addToCart={addToCart} setCurrentPage={setCurrentPage} />;
+        }
+    };
+
+    const handleUserClick = () => {
+        const token = localStorage.getItem('marutham_jwt');
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                if (payload.role === 'admin') {
+                    setCurrentPage('admin-dashboard');
+                } else {
+                    setCurrentPage('user-dashboard');
+                }
+            } catch (e) {
+                // If token is invalid, open the modal to login again
+                setIsUserOpen(true);
+            }
+        } else {
+            setIsUserOpen(true);
         }
     };
 
@@ -84,7 +109,7 @@ export default function App() {
                 setCurrentPage={setCurrentPage}
                 toggleCart={() => setIsCartOpen(!isCartOpen)}
                 toggleSearch={() => setIsSearchOpen(!isSearchOpen)}
-                toggleUser={() => setIsUserOpen(!isUserOpen)}
+                toggleUser={handleUserClick}
                 cartCount={cartCount}
             />
 
@@ -145,6 +170,7 @@ export default function App() {
                     <UserModal 
                         isOpen={isUserOpen}
                         onClose={() => setIsUserOpen(false)}
+                        setCurrentPage={setCurrentPage}
                     />
                 )}
             </AnimatePresence>
