@@ -5,13 +5,36 @@ export default function UserModal({ isOpen, onClose }) {
     const [isRegisterMode, setIsRegisterMode] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert(isRegisterMode ? "Registration Successful! Welcome to Marutham." : "Logged In Successfully!");
+        
+        // Mock JWT generation for frontend demonstration
+        const mockHeader = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+        const mockPayload = btoa(JSON.stringify({ 
+            email, 
+            name: isRegisterMode ? name : undefined, 
+            phone: isRegisterMode ? phone : undefined,
+            exp: Math.floor(Date.now() / 1000) + (60 * 60) 
+        }));
+        const mockSignature = "mock_signature_for_demo";
+        const jwtToken = `${mockHeader}.${mockPayload}.${mockSignature}`;
+        
+        localStorage.setItem('marutham_jwt', jwtToken);
+
+        if (isRegisterMode) {
+            alert(`Registration Successful for ${name}!\nJWT Token generated and stored.`);
+        } else {
+            alert("Logged In Successfully!\nJWT Token generated and stored.");
+        }
+        
         onClose();
         setEmail('');
         setPassword('');
+        setName('');
+        setPhone('');
     };
 
     return (
@@ -52,6 +75,32 @@ export default function UserModal({ isOpen, onClose }) {
                         
                         {/* Auth Form */}
                         <form onSubmit={handleSubmit} className="space-y-4">
+                            {isRegisterMode && (
+                                <>
+                                    <div>
+                                        <label className="block font-label-sm text-xs text-earth-brown/80 mb-2 font-bold">Full Name</label>
+                                        <input 
+                                            type="text" 
+                                            required 
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            className="w-full bg-white border border-earth-brown/10 rounded-md p-3 font-body-md text-earth-brown focus:border-ghee-gold focus:ring-1 focus:ring-ghee-gold outline-none" 
+                                            placeholder="Enter your full name" 
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block font-label-sm text-xs text-earth-brown/80 mb-2 font-bold">Phone Number</label>
+                                        <input 
+                                            type="tel" 
+                                            required 
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            className="w-full bg-white border border-earth-brown/10 rounded-md p-3 font-body-md text-earth-brown focus:border-ghee-gold focus:ring-1 focus:ring-ghee-gold outline-none" 
+                                            placeholder="+91 9876543210" 
+                                        />
+                                    </div>
+                                </>
+                            )}
                             <div>
                                 <label className="block font-label-sm text-xs text-earth-brown/80 mb-2 font-bold">Email Address</label>
                                 <input 
