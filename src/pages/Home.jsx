@@ -317,7 +317,7 @@ export default function Home({ addToCart, setCurrentPage }) {
                 <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_35%_45%,rgba(212,175,55,0.12)_0%,transparent_75%)] pointer-events-none" />
 
                 {/* Content Container (Text deck layout right-aligned beside the image) */}
-                <div className="absolute right-6 md:right-12 lg:right-24 top-1/2 -translate-y-1/2 w-[90%] sm:w-[500px] h-[460px] select-none z-10 pointer-events-auto">
+                <div className="absolute inset-x-6 md:inset-x-auto md:right-12 lg:right-24 bottom-16 md:bottom-auto md:top-1/2 md:-translate-y-1/2 sm:w-[500px] h-[320px] md:h-[460px] select-none z-10 pointer-events-auto text-center md:text-left mx-auto md:mx-0">
 
                     {/* Panel 0 – Initial Intro Text */}
                     <div className="luxury-intro-text absolute inset-0 flex flex-col justify-center z-10 h-full">
@@ -331,7 +331,7 @@ export default function Home({ addToCart, setCurrentPage }) {
                             <p className="font-body-lg text-body-md text-earth-brown/80 mb-8 leading-relaxed">
                                 Crafted from the milk of free-grazing cows using the traditional Vedic Bilona method.
                             </p>
-                            <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                                 <button
                                     onClick={() => { const el = document.getElementById('products'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
                                     className="bg-earth-brown text-warm-cream px-8 py-4 font-label-lg text-label-sm font-bold hover:bg-ghee-gold hover:text-earth-brown hover:scale-[1.03] transition-all text-center cursor-pointer rounded shadow-sm btn-shimmer"
@@ -406,7 +406,7 @@ export default function Home({ addToCart, setCurrentPage }) {
                 </div>
 
                 {/* Left Column: Enlarged Product Image positioned properly on the left, without getting cut off */}
-                <div className="absolute left-6 md:left-12 lg:left-24 top-[48%] -translate-y-1/2 w-[90%] md:w-[65%] lg:w-[48vw] max-w-[800px] aspect-[3/2] flex items-center justify-center z-0 select-none pointer-events-auto">
+                <div className="absolute inset-x-6 md:inset-x-auto md:left-12 lg:left-24 top-24 md:top-[48%] md:-translate-y-1/2 md:w-[65%] lg:w-[48vw] max-w-[800px] h-[40vh] md:h-auto md:aspect-[3/2] flex items-center justify-center z-0 select-none pointer-events-auto mx-auto md:mx-0">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-ghee-gold/5 rounded-full blur-3xl pointer-events-none" />
 
                     <div className="luxury-canvas-container relative w-full h-full flex items-center justify-center">

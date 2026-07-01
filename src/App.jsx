@@ -123,18 +123,6 @@ export default function App() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.4 }}
                     >
-                        {/* Slide transition curtain overlay */}
-                        <motion.div
-                            initial={{ x: "-100%" }}
-                            animate={{ x: ["-100%", "0%", "100%"] }}
-                            transition={{ duration: 1.0, times: [0, 0.45, 1], ease: [0.76, 0, 0.24, 1] }}
-                            className="fixed inset-0 bg-deep-brown z-[999] pointer-events-none flex items-center justify-center"
-                        >
-                            <h3 className="font-display-lg text-ghee-gold text-4xl font-bold tracking-widest opacity-40 uppercase select-none">
-                                Marutham
-                            </h3>
-                        </motion.div>
-
                         {renderPage()}
                     </motion.div>
                 </AnimatePresence>
