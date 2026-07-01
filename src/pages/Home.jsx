@@ -79,146 +79,136 @@ export default function Home({ addToCart, setCurrentPage }) {
             if (hasInitializedRef.current) return;
             hasInitializedRef.current = true;
 
-            // Load-in animations
-            gsap.fromTo(".luxury-intro-text",
-                { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, duration: 0.9, delay: 0.1, ease: "power3.out" }
-            );
-            gsap.fromTo(".luxury-canvas-container",
-                { scale: 0.92, opacity: 0 },
-                { scale: 1.0, opacity: 1, duration: 1.1, delay: 0.05, ease: "power3.out" }
-            );
+            let mm = gsap.matchMedia();
 
-            // All scroll panels start hidden
-            gsap.set(".scroll-panel", { opacity: 0, y: 40, x: 0 });
+            mm.add("(min-width: 768px)", () => {
+                // Desktop animations (pinning, fading)
+                gsap.fromTo(".luxury-intro-text",
+                    { opacity: 0, y: 30 },
+                    { opacity: 1, y: 0, duration: 0.9, delay: 0.1, ease: "power3.out" }
+                );
+                gsap.fromTo(".luxury-canvas-container",
+                    { scale: 0.92, opacity: 0 },
+                    { scale: 1.0, opacity: 1, duration: 1.1, delay: 0.05, ease: "power3.out" }
+                );
 
-            // Initialize progress dot states
-            gsap.set(".progress-dot-0", { backgroundColor: "#8B5A2B", scale: 1.2 });
-            gsap.set(".progress-dot-1, .progress-dot-2, .progress-dot-3", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0 });
+                gsap.set(".scroll-panel", { opacity: 0, y: 40, x: 0 });
 
-            // Master scrubbed timeline
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: luxuryHeroRef.current,
-                    start: "top top",
-                    end: "+=320%",  // Pin space for a premium experience
-                    scrub: 1.5,    // High scrub = maximum smoothness
-                    pin: true,
-                    anticipatePin: 1
-                }
+                gsap.set(".progress-dot-0", { backgroundColor: "#8B5A2B", scale: 1.2 });
+                gsap.set(".progress-dot-1, .progress-dot-2, .progress-dot-3", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0 });
+
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: luxuryHeroRef.current,
+                        start: "top top",
+                        end: "+=320%",  
+                        scrub: 1.5,    
+                        pin: true,
+                        anticipatePin: 1
+                    }
+                });
+
+                tl.addLabel("intro", 0)
+                    .to(".luxury-canvas-scroll-wrapper", {
+                        scale: 1.0, x: 0, rotate: 0,
+                        duration: 3, ease: "power1.inOut"
+                    }, "intro")
+                    .to(luxuryHeroRef.current, {
+                        backgroundColor: "#FAF7F0",
+                        duration: 3, ease: "power1.inOut"
+                    }, "intro")
+                    .addLabel("panel1-transition", 3)
+                    .to(".luxury-intro-scroll-wrapper", {
+                        opacity: 0, y: -20,
+                        duration: 2, ease: "power2.inOut"
+                    }, "panel1-transition")
+                    .to(".progress-dot-0", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel1-transition")
+                    .to(".progress-dot-1", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel1-transition")
+                    .to(luxuryHeroRef.current, {
+                        backgroundColor: "#E6EBE0",
+                        duration: 3, ease: "power2.inOut"
+                    }, "panel1-transition")
+                    .fromTo(".scroll-panel-1",
+                        { opacity: 0, y: 40 },
+                        { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
+                        "panel1-transition+=1"
+                    )
+                    .to(".luxury-canvas-scroll-wrapper", {
+                        scale: 1.04, x: 12, rotate: 2,
+                        duration: 3, ease: "power2.inOut"
+                    }, "panel1-transition+=0.5")
+                    .addLabel("panel1-hold", "panel1-transition+=4")
+                    .addLabel("panel2-transition", "panel1-hold+=2")
+                    .to(".scroll-panel-1", {
+                        opacity: 0, y: -20,
+                        duration: 2, ease: "power2.inOut"
+                    }, "panel2-transition")
+                    .to(".progress-dot-1", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel2-transition")
+                    .to(".progress-dot-2", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel2-transition")
+                    .to(luxuryHeroRef.current, {
+                        backgroundColor: "#F5EBE6",
+                        duration: 3, ease: "power2.inOut"
+                    }, "panel2-transition")
+                    .fromTo(".scroll-panel-2",
+                        { opacity: 0, y: 40 },
+                        { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
+                        "panel2-transition+=1"
+                    )
+                    .to(".luxury-canvas-scroll-wrapper", {
+                        scale: 1.06, x: -8, rotate: -2,
+                        duration: 3, ease: "power2.inOut"
+                    }, "panel2-transition+=0.5")
+                    .addLabel("panel2-hold", "panel2-transition+=4")
+                    .addLabel("panel3-transition", "panel2-hold+=2")
+                    .to(".scroll-panel-2", {
+                        opacity: 0, y: -20,
+                        duration: 2, ease: "power2.inOut"
+                    }, "panel3-transition")
+                    .to(".progress-dot-2", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel3-transition")
+                    .to(".progress-dot-3", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel3-transition")
+                    .to(luxuryHeroRef.current, {
+                        backgroundColor: "#FAF0D7",
+                        duration: 3, ease: "power2.inOut"
+                    }, "panel3-transition")
+                    .fromTo(".scroll-panel-3",
+                        { opacity: 0, y: 40 },
+                        { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
+                        "panel3-transition+=1"
+                    )
+                    .to(".luxury-canvas-scroll-wrapper", {
+                        scale: 1.03, x: 0, rotate: 0,
+                        filter: "drop-shadow(0 20px 50px rgba(212,175,55,0.15))",
+                        duration: 3, ease: "power2.inOut"
+                    }, "panel3-transition+=0.5")
+                    .addLabel("panel3-hold", "panel3-transition+=4")
+                    .addLabel("exit", "panel3-hold+=2")
+                    .to(".scroll-panel-3", {
+                        opacity: 0, y: -20,
+                        duration: 2, ease: "power2.inOut"
+                    }, "exit")
+                    .to(".progress-dot-3", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "exit")
+                    .to(luxuryHeroRef.current, {
+                        backgroundColor: "#FAF7F0",
+                        duration: 3, ease: "power2.inOut"
+                    }, "exit")
+                    .to(".luxury-canvas-scroll-wrapper", {
+                        scale: 0.88, y: -80, opacity: 0,
+                        filter: "drop-shadow(0 0 0 rgba(0,0,0,0))",
+                        duration: 3, ease: "power2.inOut"
+                    }, "exit+=0.5");
             });
 
-            // ─── Phase 1: Intro visible, jar settles ───────────────────
-            tl.addLabel("intro", 0)
-                .to(".luxury-canvas-scroll-wrapper", {
-                    scale: 1.0, x: 0, rotate: 0,
-                    duration: 3, ease: "power1.inOut"
-                }, "intro")
-                .to(luxuryHeroRef.current, {
-                    backgroundColor: "#FAF7F0",
-                    duration: 3, ease: "power1.inOut"
-                }, "intro")
-
-                // ─── Phase 2: Intro out → Panel 1 in ──────────────────────
-                .addLabel("panel1-transition", 3)
-                .to(".luxury-intro-scroll-wrapper", {
-                    opacity: 0, y: -20,
-                    duration: 2, ease: "power2.inOut"
-                }, "panel1-transition")
-                // Progress dot animation
-                .to(".progress-dot-0", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel1-transition")
-                .to(".progress-dot-1", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel1-transition")
-                // Background color shift (Pastel Sage Green)
-                .to(luxuryHeroRef.current, {
-                    backgroundColor: "#E6EBE0",
-                    duration: 3, ease: "power2.inOut"
-                }, "panel1-transition")
-                .fromTo(".scroll-panel-1",
-                    { opacity: 0, y: 40 },
-                    { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
-                    "panel1-transition+=1"
-                )
-                // Rotate and scale the high-res image slightly to give a dynamic 3D perspective feel!
-                .to(".luxury-canvas-scroll-wrapper", {
-                    scale: 1.04, x: 12, rotate: 2,
-                    duration: 3, ease: "power2.inOut"
-                }, "panel1-transition+=0.5")
-
-                // ─── Hold Panel 1 ─────────────────────────────────────────
-                .addLabel("panel1-hold", "panel1-transition+=4")
-
-                // ─── Phase 3: Panel 1 out → Panel 2 in ───────────────────
-                .addLabel("panel2-transition", "panel1-hold+=2")
-                .to(".scroll-panel-1", {
-                    opacity: 0, y: -20,
-                    duration: 2, ease: "power2.inOut"
-                }, "panel2-transition")
-                // Progress dot animation
-                .to(".progress-dot-1", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel2-transition")
-                .to(".progress-dot-2", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel2-transition")
-                // Background color shift (Soft Rose Saffron)
-                .to(luxuryHeroRef.current, {
-                    backgroundColor: "#F5EBE6",
-                    duration: 3, ease: "power2.inOut"
-                }, "panel2-transition")
-                .fromTo(".scroll-panel-2",
-                    { opacity: 0, y: 40 },
-                    { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
-                    "panel2-transition+=1"
-                )
-                .to(".luxury-canvas-scroll-wrapper", {
-                    scale: 1.06, x: -8, rotate: -2,
-                    duration: 3, ease: "power2.inOut"
-                }, "panel2-transition+=0.5")
-
-                // ─── Hold Panel 2 ─────────────────────────────────────────
-                .addLabel("panel2-hold", "panel2-transition+=4")
-
-                // ─── Phase 4: Panel 2 out → Panel 3 in ───────────────────
-                .addLabel("panel3-transition", "panel2-hold+=2")
-                .to(".scroll-panel-2", {
-                    opacity: 0, y: -20,
-                    duration: 2, ease: "power2.inOut"
-                }, "panel3-transition")
-                // Progress dot animation
-                .to(".progress-dot-2", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "panel3-transition")
-                .to(".progress-dot-3", { backgroundColor: "#8B5A2B", scale: 1.2, duration: 1.5 }, "panel3-transition")
-                // Background color shift (Golden Honey/Amber)
-                .to(luxuryHeroRef.current, {
-                    backgroundColor: "#FAF0D7",
-                    duration: 3, ease: "power2.inOut"
-                }, "panel3-transition")
-                .fromTo(".scroll-panel-3",
-                    { opacity: 0, y: 40 },
-                    { opacity: 1, y: 0, duration: 2.5, ease: "power2.out" },
-                    "panel3-transition+=1"
-                )
-                .to(".luxury-canvas-scroll-wrapper", {
-                    scale: 1.03, x: 0, rotate: 0,
-                    filter: "drop-shadow(0 20px 50px rgba(212,175,55,0.15))",
-                    duration: 3, ease: "power2.inOut"
-                }, "panel3-transition+=0.5")
-
-                // ─── Hold Panel 3 ─────────────────────────────────────────
-                .addLabel("panel3-hold", "panel3-transition+=4")
-
-                // ─── Phase 5: Exit ────────────────────────────────────────
-                .addLabel("exit", "panel3-hold+=2")
-                .to(".scroll-panel-3", {
-                    opacity: 0, y: -20,
-                    duration: 2, ease: "power2.inOut"
-                }, "exit")
-                .to(".progress-dot-3", { backgroundColor: "rgba(139,90,43,0.2)", scale: 1.0, duration: 1.5 }, "exit")
-                // Return back to initial background color on exit
-                .to(luxuryHeroRef.current, {
-                    backgroundColor: "#FAF7F0",
-                    duration: 3, ease: "power2.inOut"
-                }, "exit")
-                .to(".luxury-canvas-scroll-wrapper", {
-                    scale: 0.88, y: -80, opacity: 0,
-                    filter: "drop-shadow(0 0 0 rgba(0,0,0,0))",
-                    duration: 3, ease: "power2.inOut"
-                }, "exit+=0.5");
+            mm.add("(max-width: 767px)", () => {
+                // Mobile animations (no pinning, simpler layout)
+                gsap.fromTo(".luxury-intro-text",
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ease: "power2.out" }
+                );
+                gsap.fromTo(".luxury-canvas-container",
+                    { scale: 0.95, opacity: 0 },
+                    { scale: 1.0, opacity: 1, duration: 1, delay: 0.2, ease: "power2.out" }
+                );
+            });
         };
 
         initScrollTrigger();
@@ -349,7 +339,7 @@ export default function Home({ addToCart, setCurrentPage }) {
                     </div>
 
                     {/* Panel 1 – Grass-Fed Origin Text */}
-                    <div className="scroll-panel scroll-panel-1 absolute inset-0 flex flex-col justify-center h-full">
+                    <div className="scroll-panel scroll-panel-1 hidden md:flex absolute inset-0 flex-col justify-center h-full">
                         <span className="text-ghee-gold text-4xl mb-6">🌿</span>
                         <span className="font-label-lg text-label-lg text-ghee-gold uppercase tracking-[0.25em] mb-4 block font-bold">
                             Step 01 — Origin
@@ -367,7 +357,7 @@ export default function Home({ addToCart, setCurrentPage }) {
                     </div>
 
                     {/* Panel 2 – Bilona Method Text */}
-                    <div className="scroll-panel scroll-panel-2 absolute inset-0 flex flex-col justify-center h-full">
+                    <div className="scroll-panel scroll-panel-2 hidden md:flex absolute inset-0 flex-col justify-center h-full">
                         <span className="text-ghee-gold text-4xl mb-6">🪔</span>
                         <span className="font-label-lg text-label-lg text-ghee-gold uppercase tracking-[0.25em] mb-4 block font-bold">
                             Step 02 — Craft
@@ -385,7 +375,7 @@ export default function Home({ addToCart, setCurrentPage }) {
                     </div>
 
                     {/* Panel 3 – Slow-Fire Clarity Text */}
-                    <div className="scroll-panel scroll-panel-3 absolute inset-0 flex flex-col justify-center h-full">
+                    <div className="scroll-panel scroll-panel-3 hidden md:flex absolute inset-0 flex-col justify-center h-full">
                         <span className="text-ghee-gold text-4xl mb-6">✨</span>
                         <span className="font-label-lg text-label-lg text-ghee-gold uppercase tracking-[0.25em] mb-4 block font-bold">
                             Step 03 — Clarity
@@ -424,7 +414,7 @@ export default function Home({ addToCart, setCurrentPage }) {
                 <motion.div
                     animate={{ y: [0, 8, 0] }}
                     transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                    className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 z-20 pointer-events-none"
+                    className="absolute bottom-20 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-1.5 z-20 pointer-events-none"
                 >
                     <span className="font-label-sm text-[10px] text-earth-brown/50 tracking-widest font-bold">SCROLL TO DISCOVER</span>
                     <span className="material-symbols-outlined text-earth-brown/60 text-lg">keyboard_arrow_down</span>
