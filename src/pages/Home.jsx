@@ -421,6 +421,63 @@ export default function Home({ addToCart, setCurrentPage }) {
                 </motion.div>
             </section>
 
+            {/* Mobile-only Steps Section (Fallback for the GSAP scroll panels) */}
+            <section className="py-20 px-margin-mobile md:hidden bg-warm-cream flex flex-col gap-16 border-b border-earth-brown/5">
+                <div className="flex flex-col gap-4 text-center">
+                    <span className="text-ghee-gold text-4xl">🌿</span>
+                    <span className="font-label-lg text-label-md text-ghee-gold uppercase tracking-[0.25em] font-bold">
+                        Step 01 — Origin
+                    </span>
+                    <h2 className="font-display-lg text-2xl text-earth-brown font-bold leading-tight">
+                        Born from Pasture,<br />Not Factories
+                    </h2>
+                    <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed">
+                        Our Gir & Hallikar cows roam freely in pesticide-free green pastures. Their A2-rich milk carries the full force of natural nutrition — no hormones, no confinement.
+                    </p>
+                    <div className="flex items-center justify-center gap-3 mt-2">
+                        <div className="w-6 h-[2px] bg-ghee-gold" />
+                        <span className="font-label-sm text-[10px] text-earth-brown/60 uppercase tracking-widest font-bold">100% Free-Grazing Desi Cows</span>
+                        <div className="w-6 h-[2px] bg-ghee-gold" />
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-4 text-center">
+                    <span className="text-ghee-gold text-4xl">🪔</span>
+                    <span className="font-label-lg text-label-md text-ghee-gold uppercase tracking-[0.25em] font-bold">
+                        Step 02 — Craft
+                    </span>
+                    <h2 className="font-display-lg text-2xl text-earth-brown font-bold leading-tight">
+                        Hand-Churned by<br />Ancestral Rhythm
+                    </h2>
+                    <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed">
+                        Milk is cultured overnight, then slow-churned with a wooden Bilona to extract the finest cultured butter. Rooted in Rigvedic tradition — every churn is a prayer.
+                    </p>
+                    <div className="flex items-center justify-center gap-3 mt-2">
+                        <div className="w-6 h-[2px] bg-ghee-gold" />
+                        <span className="font-label-sm text-[10px] text-earth-brown/60 uppercase tracking-widest font-bold">Vedic Bilona Method</span>
+                        <div className="w-6 h-[2px] bg-ghee-gold" />
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-4 text-center">
+                    <span className="text-ghee-gold text-4xl">✨</span>
+                    <span className="font-label-lg text-label-md text-ghee-gold uppercase tracking-[0.25em] font-bold">
+                        Step 03 — Clarity
+                    </span>
+                    <h2 className="font-display-lg text-2xl text-earth-brown font-bold leading-tight">
+                        Golden. Grainy.<br />Perfectly Clarified.
+                    </h2>
+                    <p className="font-body-lg text-body-md text-earth-brown/80 leading-relaxed">
+                        Butter is slow-clarified over a wood fire in clay pots. The result? A rich, nutty aroma and a golden hue packed with Butyric acid, Vitamin K2, and Omega-3 fatty acids.
+                    </p>
+                    <div className="flex items-center justify-center gap-2 flex-wrap mt-2 max-w-sm mx-auto">
+                        {["Butyric Acid", "Vitamin K2", "Omega-3", "CLA"].map(tag => (
+                            <span key={tag} className="px-3 py-1 bg-ghee-gold/10 text-earth-brown text-xs font-bold rounded-full border border-ghee-gold/30">{tag}</span>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* Featured Section: Sattvic by Nature */}
             <section className="py-24 bg-surface px-margin-mobile md:px-margin-desktop">
                 <div className="max-w-container-max mx-auto">
